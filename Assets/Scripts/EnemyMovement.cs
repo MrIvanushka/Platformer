@@ -6,7 +6,6 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private Transform _path;
     [SerializeField] private float _speed;
-    [SerializeField] private float _punchForce;
     private Transform[] _points;
     private int _currentPoint = 0;
 
@@ -29,17 +28,6 @@ public class EnemyMovement : MonoBehaviour
         {
             _currentPoint = Mathf.RoundToInt(Mathf.Repeat(_currentPoint + 1, _points.Length));
             transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        PlayerMovement player;
-
-        if (collision.TryGetComponent<PlayerMovement>(out player))
-        {
-            float deltaPositionX = collision.transform.position.x - transform.position.x;
-            player.TakePunch(deltaPositionX, _punchForce);
         }
     }
 }
