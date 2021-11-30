@@ -26,7 +26,6 @@ public class EnemyCombat : MonoBehaviour
 
         if (collision.collider.TryGetComponent<PlayerStats>(out player))
         {
-            Debug.Log(collision.contacts[0].normal);
             if (collision.contacts[0].normal != Vector2.down)
             {
                 float deltaPositionX = collision.transform.position.x - transform.position.x;
