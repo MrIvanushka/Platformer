@@ -22,9 +22,9 @@ public class EnemyCombat : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        PlayerStats player;
+        PlayerHealth player;
 
-        if (collision.collider.TryGetComponent<PlayerStats>(out player))
+        if (collision.collider.TryGetComponent<PlayerHealth>(out player))
         {
             if (collision.contacts[0].normal != Vector2.down)
             {

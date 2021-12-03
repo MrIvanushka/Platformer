@@ -4,45 +4,30 @@ using UnityEngine;
 
 public class CharacterAnimator : MonoBehaviour
 {
-    private enum Direction
-    {
-        Left,
-        Right
-    };
+    [SerializeField] private string _velocityXLiteral;
+    [SerializeField] private string _velocityYLiteral;
 
     private Animator _animator;
     private PlayerMovement _movement;
-    private Direction _direction;
+    private bool _speedIsPositive;
 
-    void Start()
+    private void Start()
     {
         _animator = GetComponent<Animator>();
         _movement = GetComponent<PlayerMovement>();
-        _direction = Direction.Right;
+        _speedIsPositive = true;
     }
 
-    void Update()
+    private void Update()
     {
         Vector2 speed = _movement.Velocity;
-        _animator.SetFloat("VelocityX", Mathf.Abs(speed.x));
-        _animator.SetFloat("VelocityY", speed.y);
+        _animator.SetFloat(_velocityXLiteral, Mathf.Abs(speed.x));
+        _animator.SetFloat(_velocityYLiteral, speed.y);
 
-        if (speed.x != 0)
+        if (speed.x != 0 && _speedIsPositive != speed.x > 0)
         {
-            Direction newDirection = ScoreCurrentDirection(speed.x);
-            if (newDirection != _direction)
-            {
-                _direction = newDirection;
-                transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            }
+            _speedIsPositive = !_speedIsPositive;
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
-    }
-
-    private Direction ScoreCurrentDirection(float speed)
-    {
-        if (speed > 0)
-            return Direction.Right;
-        else
-            return Direction.Left;
     }
 }

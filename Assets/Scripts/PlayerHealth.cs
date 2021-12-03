@@ -1,22 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerStats : MonoBehaviour
+public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private float _maxHealth;
-    [SerializeField] private HealthBar _healthBar;
     [SerializeField] private GameObject _deathMessage;
-
+    
+    private UnityAction _onChangeHealth;
     private float _currentHealth;
     private PlayerMovement _movement;
-    
-    void Start()
+
+    public float CurrentHealth => _currentHealth;
+    public float MaxHealth => _maxHealth;
+
+    private void Start()
     {
         _movement = GetComponent<PlayerMovement>();
         ChangeHealth(_maxHealth);
+    }
+
+    public void AddChangeHealthHandler(UnityAction action)
+    {
+        _onChangeHealth += action;
+    }
+
+    public void RemoveChangeHealthHandler(UnityAction action)
+    {
+        _onChangeHealth -= action;
     }
 
     public void TakeDamage(float damage)
@@ -59,12 +71,17 @@ public class PlayerStats : MonoBehaviour
     private void ChangeHealth(float health)
     {
         _currentHealth = health;
-        _healthBar.UpdateValue(_currentHealth / _maxHealth);
+        _onChangeHealth?.Invoke();
     }
 
     private void Die()
     {
         _deathMessage.SetActive(true);
         Time.timeScale = 0;
+    }
+
+    private void OnDisable()
+    {
+        _onChangeHealth = null;
     }
 }

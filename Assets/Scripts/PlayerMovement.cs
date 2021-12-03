@@ -24,19 +24,19 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 Velocity => _velocity;
 
-    void OnEnable()
+    private void OnEnable()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    void Start()
+    private void Start()
     {
         _contactFilter.useTriggers = false;
         _contactFilter.SetLayerMask(_groundLayer);
         _contactFilter.useLayerMask = true;
     }
 
-    void Update()
+    private void Update()
     {
         if (_isGrounded == true)
         {
@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         _velocity += _gravityModifier * Physics2D.gravity * Time.deltaTime;
         
@@ -73,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         _isGrounded = false;
     }
 
-    void Move(Vector2 motion, bool yMovement)
+    private void Move(Vector2 motion, bool yMovement)
     {
         float distance = motion.magnitude;
 
