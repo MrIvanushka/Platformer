@@ -7,24 +7,24 @@ using DG.Tweening;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] private PlayerHealth _referencePlayer;
+    [SerializeField] private PlayerHealth _showingStats;
     [SerializeField] private Slider _slider;
     [SerializeField] private float _updatingTime = 1f;
 
     private void OnEnable()
     {
-        _referencePlayer.AddChangeHealthHandler(UpdateValue);
+        _showingStats.AddChangeHealthHandler(UpdateValue);
     }
 
     public void UpdateValue()
     {
-        float value = _referencePlayer.CurrentHealth / _referencePlayer.MaxHealth;
+        float value = _showingStats.CurrentHealth / _showingStats.MaxHealth;
         float delta = value - _slider.value;
         DOTween.To(() => _slider.value, x => _slider.value = x, value, _updatingTime);
     }
 
     private void OnDisable()
     {
-        _referencePlayer?.RemoveChangeHealthHandler(UpdateValue);
+        _showingStats?.RemoveChangeHealthHandler(UpdateValue);
     }
 }
