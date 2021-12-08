@@ -8,27 +8,18 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float _maxHealth;
     [SerializeField] private GameObject _deathMessage;
     
-    private UnityAction _onChangeHealth;
     private float _currentHealth;
     private PlayerMovement _movement;
 
     public float CurrentHealth => _currentHealth;
     public float MaxHealth => _maxHealth;
 
+    public event UnityAction OnChangeHealth;
+
     private void Start()
     {
         _movement = GetComponent<PlayerMovement>();
         ChangeHealth(_maxHealth);
-    }
-
-    public void AddChangeHealthHandler(UnityAction action)
-    {
-        _onChangeHealth += action;
-    }
-
-    public void RemoveChangeHealthHandler(UnityAction action)
-    {
-        _onChangeHealth -= action;
     }
 
     public void TakeDamage(float damage)
@@ -47,6 +38,10 @@ public class PlayerHealth : MonoBehaviour
                 ChangeHealth(newHealth);
             }
         }
+        else
+        {
+            throw new Exception("Negative damage");
+        }
     }
 
     public void Heal(float healValue)
@@ -60,6 +55,10 @@ public class PlayerHealth : MonoBehaviour
             else
                 ChangeHealth(newHealth);
         }
+        else
+        {
+            throw new Exception("Negative healing value");
+        }
     }
 
     public void TakePunch(float deltaPositionX, float punchForce, float damage)
@@ -71,7 +70,7 @@ public class PlayerHealth : MonoBehaviour
     private void ChangeHealth(float health)
     {
         _currentHealth = health;
-        _onChangeHealth?.Invoke();
+        OnChangeHealth?.Invoke();
     }
 
     private void Die()
@@ -82,6 +81,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnDisable()
     {
-        _onChangeHealth = null;
+        OnChangeHealth = null;
     }
 }

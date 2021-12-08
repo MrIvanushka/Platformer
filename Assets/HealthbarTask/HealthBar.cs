@@ -13,10 +13,10 @@ public class HealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        _showingStats.AddChangeHealthHandler(UpdateValue);
+        _showingStats.OnChangeHealth += UpdateValue;
     }
 
-    public void UpdateValue()
+    private void UpdateValue()
     {
         float value = _showingStats.CurrentHealth / _showingStats.MaxHealth;
         float delta = value - _slider.value;
@@ -25,6 +25,6 @@ public class HealthBar : MonoBehaviour
 
     private void OnDisable()
     {
-        _showingStats?.RemoveChangeHealthHandler(UpdateValue);
+        _showingStats.OnChangeHealth -= UpdateValue;
     }
 }
