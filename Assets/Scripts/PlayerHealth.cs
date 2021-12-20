@@ -9,68 +9,52 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private GameObject _deathMessage;
     
     private float _currentHealth;
-    private PlayerMovement _movement;
 
     public float CurrentHealth => _currentHealth;
     public float MaxHealth => _maxHealth;
 
-    public event UnityAction OnChangeHealth;
+    public event UnityAction HealthChanged;
 
     private void Start()
     {
-        _movement = GetComponent<PlayerMovement>();
         ChangeHealth(_maxHealth);
     }
 
     public void TakeDamage(float damage)
     {
-        if (damage > 0)
-        {
-            float newHealth = _currentHealth - damage;
+        if (damage <= 0)
+            throw new Exception("Negative damage");
+        
+        float newHealth = _currentHealth - damage;
 
-            if (newHealth < 0)
-            {
-                ChangeHealth(0);
-                Die();
-            }
-            else
-            {
-                ChangeHealth(newHealth);
-            }
+        if (newHealth < 0)
+        {
+            ChangeHealth(0);
+            Die();
         }
         else
         {
-            throw new Exception("Negative damage");
+            ChangeHealth(newHealth);
         }
     }
 
     public void Heal(float healValue)
     {
-        if (healValue > 0)
-        {
-            float newHealth = _currentHealth + healValue;
+        if (healValue <= 0)
+            throw new ArgumentOutOfRangeException("Negative healing value");
 
-            if (newHealth > _maxHealth)
-                ChangeHealth(_maxHealth);
-            else
-                ChangeHealth(newHealth);
-        }
+        float newHealth = _currentHealth + healValue;
+
+        if (newHealth > _maxHealth)
+            ChangeHealth(_maxHealth);
         else
-        {
-            throw new Exception("Negative healing value");
-        }
-    }
-
-    public void TakePunch(float deltaPositionX, float punchForce, float damage)
-    {
-        TakeDamage(damage);
-        _movement.TakePunch(deltaPositionX, punchForce);
+            ChangeHealth(newHealth);
     }
 
     private void ChangeHealth(float health)
     {
         _currentHealth = health;
-        OnChangeHealth?.Invoke();
+        HealthChanged?.Invoke();
     }
 
     private void Die()
@@ -81,6 +65,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnDisable()
     {
-        OnChangeHealth = null;
+        HealthChanged = null;
     }
 }

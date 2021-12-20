@@ -535,7 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 340795432871b3344b4f8c1a8d674dd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _punchForce: 3
+  _punchForce: 2
   _damage: 30
   _animationDeathTrigger: isDead
 --- !u!1 &366067004

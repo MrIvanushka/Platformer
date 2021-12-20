@@ -29,7 +29,8 @@ public class EnemyCombat : MonoBehaviour
             if (collision.contacts[0].normal != Vector2.down)
             {
                 float deltaPositionX = collision.transform.position.x - transform.position.x;
-                player.TakePunch(deltaPositionX, _punchForce, _damage);
+                player.GetComponent<PlayerMovement>().TakePunch(deltaPositionX, _punchForce);
+                player.TakeDamage(_damage);
             }
             else
             {

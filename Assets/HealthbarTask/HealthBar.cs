@@ -13,18 +13,17 @@ public class HealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        _showingStats.OnChangeHealth += UpdateValue;
+        _showingStats.HealthChanged += OnHealthChanged;
     }
 
-    private void UpdateValue()
+    private void OnHealthChanged()
     {
         float value = _showingStats.CurrentHealth / _showingStats.MaxHealth;
-        float delta = value - _slider.value;
         DOTween.To(() => _slider.value, x => _slider.value = x, value, _updatingTime);
     }
 
     private void OnDisable()
     {
-        _showingStats.OnChangeHealth -= UpdateValue;
+        _showingStats.HealthChanged -= OnHealthChanged;
     }
 }
